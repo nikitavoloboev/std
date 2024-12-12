@@ -91,5 +91,8 @@
     "./uuid",
     "./webgpu",
     "./yaml"
-  ]
+  ],
+  "fmt": {
+    "semiColons": false
+  }
 }

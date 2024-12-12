@@ -28,7 +28,7 @@ export type MemoizationCache<K, V> = {
 export type MemoizeOptions<
   Fn extends (...args: never[]) => unknown,
   Key,
-  Cache extends MemoizationCache<Key, ReturnType<Fn>>,
+  Cache extends MemoizationCache<Key, ReturnType<Fn>>
 > = {
   /**
    * Provide a custom cache for getting previous results. By default, a new
@@ -101,21 +101,17 @@ export type MemoizeOptions<
 export function memoize<
   Fn extends (...args: never[]) => unknown,
   Key = string,
-  Cache extends MemoizationCache<Key, ReturnType<Fn>> = Map<
-    Key,
-    ReturnType<Fn>
-  >,
->(
-  fn: Fn,
-  options?: MemoizeOptions<Fn, Key, Cache>,
-): Fn {
+  Cache extends MemoizationCache<Key, ReturnType<Fn>> = Map<Key, ReturnType<Fn>>
+>(fn: Fn, options?: MemoizeOptions<Fn, Key, Cache>): Fn {
   const cache = options?.cache ?? new Map();
-  const getKey = options?.getKey ??
-    _serializeArgList(
-      cache as MemoizationCache<unknown, unknown>,
+  const getKey =
+    options?.getKey ??
+    (_serializeArgList(
+      cache as MemoizationCache<unknown, unknown>
     ) as unknown as (
-      (this: ThisParameterType<Fn>, ...args: Parameters<Fn>) => Key
-    );
+      this: ThisParameterType<Fn>,
+      ...args: Parameters<Fn>
+    ) => Key);
   const memoized = function (
     this: ThisParameterType<Fn>,
     ...args: Parameters<Fn>
@@ -140,11 +136,8 @@ export function memoize<
     return val;
   } as Fn;
 
-  return Object.defineProperties(
-    memoized,
-    {
-      length: { value: fn.length },
-      name: { value: fn.name },
-    },
-  );
+  return Object.defineProperties(memoized, {
+    length: { value: fn.length },
+    name: { value: fn.name },
+  });
 }
