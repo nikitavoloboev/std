@@ -1,5 +1,6 @@
 // run this test with:
 // deno test --unstable-http --unstable-webgpu --doc --allow-all --parallel --coverage --trace-leaks --clean try/try_test.ts
+// TODO: find better way to do this
 import { assertEquals, assertFalse } from "@std/assert";
 import { isNil, validate, version } from "../uuid/common.ts";
 
